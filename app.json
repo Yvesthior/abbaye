@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "abbaye",
+    "slug": "abbaye",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "abbaye"
+}
