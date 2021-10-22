@@ -11,10 +11,10 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
-  FlatList,
-  Animated,
   Image,
+  Dimensions,
+  Flatlist,
+  Animated,
 } from "react-native";
 
 const { width, height } = Dimensions.get("screen");
@@ -34,16 +34,41 @@ const data = Object.keys(images).map((i) => ({
   image: images[i],
 }));
 
+const Tab = ({ item }) => {
+  return (
+    <View>
+      <Text> {item.title}</Text>
+    </View>
+  );
+};
+
+const Tabs = ({ data, scrollX }) => {
+  return (
+    <View>
+      <View>
+        {data.map((item) => {
+          return <Tab key={item.key} item={item} />;
+        })}
+      </View>
+    </View>
+  );
+};
+
 export default function App() {
+  const scrollX = React.useRef(new Animated.Value(0)).current;
   return (
     <View style={styles.container}>
       <StatusBar hidden />
       <Animated.FlatList
         data={data}
         horizontal
-        showsHorizontalScrollIndicator={false}
         pagingEnabled
+        showsHorizontalScrollIndicator={false}
         bounces={false}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: false }
+        )}
         keyExtractor={(item) => item.key}
         renderItem={({ item }) => {
           return (
@@ -52,10 +77,17 @@ export default function App() {
                 source={{ uri: item.image }}
                 style={{ flex: 1, resizeMode: "cover" }}
               />
+              <View
+                style={[
+                  StyleSheet.absoluteFillObject,
+                  { backgroundColor: "rgba(0,0,0,0.3)" },
+                ]}
+              />
             </View>
           );
         }}
       />
+      <Tabs scrollX={scrollX} data={data} />
     </View>
   );
 }
